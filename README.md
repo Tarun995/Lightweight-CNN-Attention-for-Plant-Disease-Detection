@@ -3,6 +3,24 @@
 A multi-stage deep learning pipeline combining YOLOv8 object detection, U²-Net background segmentation, and CNNs with custom Attention layers to diagnose plant leaf diseases with high precision.
 
 ---
+## 🖥️ Streamlit Application Interface
+
+### 1. Multi-Stage Pipeline Diagnosis & Leaf Isolation
+<p align="center">
+  <img src="assets/02_pipeline_execution.png" width="85%" alt="Pipeline Execution Step">
+</p>
+
+### 2. Deep Learning Interpretability via Grad-CAM
+<p align="center">
+  <img src="assets/03_gradcam_visualization.png" width="85%" alt="Grad-CAM Visualization">
+</p>
+
+### 3. Comprehensive Model Analytics & Evaluation Dashboard
+<p align="center">
+  <img src="assets/04_research_dashboard.png" width="85%" alt="Model Analysis Dashboard">
+</p>
+
+---
 
 ##  Key Features
 - **Leaf Localization**: YOLOv8 extracts leaf bounding boxes to crop extraneous background noise.
