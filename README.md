@@ -51,7 +51,7 @@ To explore the user interface without running the code locally, click on any of 
   <summary>📊 <b>5. Model Analysis & Grad-CAM Dashboards</b></summary>
   <br>
   <p align="center">
-    <img src="assets/gradcam.png" width="85%" alt="Grad-CAM 1">
+    <img src="assets/screenshots/gradcam.png" width="85%" alt="Grad-CAM 1">
   </p>
 </details>
 
