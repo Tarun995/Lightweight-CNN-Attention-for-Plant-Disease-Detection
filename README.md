@@ -123,11 +123,31 @@ Open [http://localhost:8501](http://localhost:8501) in your browser.
 
 ---
 
-## 🔬 Experimental Performance
-Our attention-augmented models achieve substantial improvements over standard CNN baselines:
+## 🔬 Core Finding: Depth vs. Dataset Size (Ablation Study)
 
-| Crop Model | Baseline CNN Accuracy | Proposed Attention CNN Accuracy | F1-Score |
+A major focus of this project is understanding the trade-off between CNN depth and dataset size[cite: 1]. We trained 7-layer, 14-layer, and 22-layer CNN architectures from scratch on two distinct data regimes[cite: 1]:
+
+| Dataset (Size) | Model Architecture | Accuracy (%) | Observation |
 |---|---|---|---|
-| **Potato** | 82.4% | **90.4%** | **90.6%** |
-| **Tomato** | 81.8% | **91.3%** | **91.0%** |
-| **Corn** | 92.1% | **97.8%** | **97.6%** |
+| **Potato** (2,152 images) | 7-layer (Shallow) | **96.67%** | Best generalization for small data[cite: 1]. |
+| **Potato** (2,152 images) | 14-layer (Medium) | 94.22% | Slight overfitting[cite: 1]. |
+| **Potato** (2,152 images) | 22-layer (Deep) | 33.33% | Severe overfitting / Model collapse[cite: 1]. |
+| **Tomato** (18,160 images)| 7-layer (Shallow) | 80.33% | Underfitting[cite: 1]. |
+| **Tomato** (18,160 images)| 14-layer (Medium) | **85.99%** | Improved capacity captures more features[cite: 1]. |
+
+**Conclusion:** Deeper CNNs benefit the larger Tomato dataset, but severely overfit the smaller Potato dataset, where a shallow 7-layer CNN is superior[cite: 1].
+
+---
+
+## 🏆 Final Optimized Model Performance
+
+By applying Heavy Augmentation and Squeeze-and-Excitation (SE) Attention to our optimized baseline models, we achieved the following final metrics[cite: 1]:
+
+| Crop | Optimized Architecture | Preprocessing | Accuracy | Macro F1 | Params | Inference |
+|---|---|---|---|---|---|---|
+| **Potato** | 7-Layer + SE Attention | Augmented | **97.8%** | **0.96** | 7.39M | 53.3 ms[cite: 1] |
+| **Tomato** | 14-Layer + SE Attention | U²-Net Background Removed | **78.9%*** | **0.73** | 6.52M | 55.0 ms[cite: 1] |
+
+*\*Note: Training on background-removed (BR) images reduces accuracy when tested on original raw images (BR→Orig) due to domain shift, but shows superior robustness when both training and inference images are background-aligned (BR→BR)*[cite: 1].
+
+---
