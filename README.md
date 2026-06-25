@@ -244,4 +244,4 @@ Open [http://localhost:8501](http://localhost:8501)
 
 ---
 
-*Associated research paper: "The Role of Network Depth, Data Augmentation, and Background Removal in Lightweight CNNs for Plant Disease Detection"*
+
