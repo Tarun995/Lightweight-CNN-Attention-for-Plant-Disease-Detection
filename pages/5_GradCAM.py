@@ -4,6 +4,7 @@ import tensorflow as tf
 import cv2
 from PIL import Image
 import os
+from utils.page_setup import inject_sidebar
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -13,36 +14,63 @@ st.set_page_config(
     layout="wide"
 )
 
+inject_sidebar()
+
 # Custom css styling
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
 html, body, [class*="css"] {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
 }
 .stApp {
-    background: linear-gradient(135deg, #0a0f1a 0%, #0d1b2a 40%, #1b2838 100%);
+    background: radial-gradient(circle at 50% 0%, #111e2e 0%, #0a111a 60%, #06090e 100%);
 }
+
 .header-container {
     margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 .header-title {
-    font-size: 2.2rem;
+    font-size: 2.6rem;
     font-weight: 800;
-    background: linear-gradient(135deg, #ffffff 0%, #a7f3d0 50%, #22c55e 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #a7f3d0 50%, #10b981 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-clip: text;
+    margin-bottom: 0.3rem;
 }
 .header-desc {
     color: #94a3b8;
-    font-size: 1rem;
+    font-size: 1.1rem;
 }
+
 .gradcam-card {
     background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
     padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* ── Content Card ── */
+.custom-content-card {
+    background: rgba(255, 255, 255, 0.015);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 1.8rem;
+    margin-top: 1rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+
+.diagnosis-header-label {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    border-left: 4px solid #10b981;
+    padding-left: 0.8rem;
     margin-bottom: 1.5rem;
 }
 </style>
@@ -139,7 +167,8 @@ def overlay_heatmap(heatmap, original_img, alpha=0.4, colormap=cv2.COLORMAP_JET)
 col_ctrl, col_display = st.columns([1, 2.2])
 
 with col_ctrl:
-    st.markdown("### ⚙️ Visualization Settings")
+    st.markdown('<div class="gradcam-card">', unsafe_allow_html=True)
+    st.markdown("<h4 style='color: #f1f5f9; margin-top: 0;'>⚙️ Settings</h4>", unsafe_allow_html=True)
     crop = st.selectbox(
         "Select Crop Model",
         options=["potato", "tomato", "corn"],
@@ -152,11 +181,12 @@ with col_ctrl:
     )
     
     alpha = st.slider("Heatmap Intensity (Alpha)", min_value=0.1, max_value=0.9, value=0.5, step=0.05)
+    st.markdown('</div>', unsafe_allow_html=True)
     
     st.markdown("""
-    <div class="gradcam-card" style="margin-top:1.5rem;">
-        <h5>💡 How to read Grad-CAM?</h5>
-        <p style="font-size:0.82rem; color:#94a3b8; line-height:1.5; margin:0;">
+    <div class="gradcam-card">
+        <h5 style="color: #fbbf24; margin-top: 0; font-weight: 700;">💡 How to read Grad-CAM?</h5>
+        <p style="font-size:0.85rem; color:#94a3b8; line-height:1.5; margin:0;">
             Red/orange regions signify the areas where the model placed the highest mathematical focus to predict the disease class. Green/blue areas represent low focus or background noise.
         </p>
     </div>
@@ -188,7 +218,7 @@ with col_display:
         pred_class = LABELS[crop][pred_idx]
         confidence = float(preds[pred_idx]) * 100
         
-        st.markdown(f"#### Predicted Label: **{pred_class}** ({confidence:.2f}% Confidence)")
+        st.markdown(f'<div class="diagnosis-header-label">Predicted Label: <span style="color:#10b981;">{pred_class}</span> ({confidence:.2f}% Confidence)</div>', unsafe_allow_html=True)
         
         # Find last conv layer
         last_conv = get_last_conv_layer_name(model)
@@ -202,9 +232,11 @@ with col_display:
                     overlay = overlay_heatmap(heatmap, img_resized, alpha=alpha)
                     
                     # Layout images side by side
+                    st.markdown('<div class="custom-content-card">', unsafe_allow_html=True)
                     c1, c2 = st.columns(2)
                     c1.image(img_resized, caption="Resized Input Image", use_container_width=True)
                     c2.image(overlay, caption=f"Grad-CAM Heatmap overlay ({last_conv})", use_container_width=True)
+                    st.markdown('</div>', unsafe_allow_html=True)
                     
                 except Exception as e:
                     st.error(f"Failed to generate Grad-CAM: {e}")
@@ -223,5 +255,7 @@ with col_display:
                 shutil.copy(paper_sample, sample_path)
                 
         if os.path.exists(sample_path):
-            st.markdown("### Sample Grad-CAM Output")
+            st.markdown("<h3 style='font-size: 1.3rem; color: #f1f5f9; margin-top:2rem;'>Sample Grad-CAM Output</h3>", unsafe_allow_html=True)
+            st.markdown('<div class="custom-content-card" style="display:inline-block;">', unsafe_allow_html=True)
             st.image(Image.open(sample_path), caption="Grad-CAM analysis highlighting Early Blight lesions on a potato leaf.", width=500)
+            st.markdown('</div>', unsafe_allow_html=True)

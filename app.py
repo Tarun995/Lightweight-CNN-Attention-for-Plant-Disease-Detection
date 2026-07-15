@@ -1,5 +1,6 @@
 # pyrefly: ignore [missing-import]
 import streamlit as st
+from utils.page_setup import inject_sidebar
 
 st.set_page_config(
     page_title="Plant Disease Detection",
@@ -8,18 +9,20 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+inject_sidebar()
+
 # ─── Custom CSS ───────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
 /* ── Import Google Font ── */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 /* ── Global ── */
 html, body, [class*="css"] {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
 }
 .stApp {
-    background: linear-gradient(135deg, #0a0f1a 0%, #0d1b2a 40%, #1b2838 100%);
+    background: radial-gradient(circle at 50% 0%, #111e2e 0%, #0a111a 60%, #06090e 100%);
 }
 
 /* Hide default streamlit elements */
@@ -35,26 +38,26 @@ header {visibility: hidden;}
 /* ── Hero Section ── */
 .hero-container {
     text-align: center;
-    padding: 3rem 2rem 2rem;
+    padding: 4rem 2rem 3rem;
     position: relative;
 }
 .hero-badge {
     display: inline-block;
-    background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(16, 185, 129, 0.1));
-    border: 1px solid rgba(34, 197, 94, 0.3);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.08));
+    border: 1px solid rgba(16, 185, 129, 0.25);
     border-radius: 50px;
     padding: 0.4rem 1.2rem;
     font-size: 0.8rem;
-    font-weight: 600;
-    color: #22c55e;
+    font-weight: 700;
+    color: #34d399;
     letter-spacing: 1.5px;
     text-transform: uppercase;
     margin-bottom: 1.5rem;
 }
 .hero-title {
-    font-size: 3.2rem;
+    font-size: 3.5rem;
     font-weight: 800;
-    background: linear-gradient(135deg, #ffffff 0%, #a7f3d0 50%, #22c55e 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #a7f3d0 50%, #10b981 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -62,9 +65,9 @@ header {visibility: hidden;}
     margin-bottom: 1rem;
 }
 .hero-subtitle {
-    font-size: 1.15rem;
+    font-size: 1.2rem;
     color: #94a3b8;
-    max-width: 650px;
+    max-width: 700px;
     margin: 0 auto 2.5rem;
     line-height: 1.7;
     font-weight: 400;
@@ -78,9 +81,9 @@ header {visibility: hidden;}
     margin: 0 auto 3rem;
 }
 .metric-card {
-    background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 16px;
     padding: 1.8rem 1.4rem;
     text-align: center;
@@ -95,14 +98,15 @@ header {visibility: hidden;}
     height: 3px;
     border-radius: 16px 16px 0 0;
 }
-.metric-card:nth-child(1)::before { background: linear-gradient(90deg, #22c55e, #10b981); }
+.metric-card:nth-child(1)::before { background: linear-gradient(90deg, #10b981, #059669); }
 .metric-card:nth-child(2)::before { background: linear-gradient(90deg, #3b82f6, #6366f1); }
-.metric-card:nth-child(3)::before { background: linear-gradient(90deg, #f59e0b, #ef4444); }
+.metric-card:nth-child(3)::before { background: linear-gradient(90deg, #f59e0b, #d97706); }
 .metric-card:nth-child(4)::before { background: linear-gradient(90deg, #8b5cf6, #ec4899); }
+
 .metric-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(255,255,255,0.15);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.35);
 }
 .metric-icon {
     font-size: 2rem;
@@ -129,23 +133,23 @@ header {visibility: hidden;}
 }
 .section-tag {
     display: inline-block;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 700;
-    color: #22c55e;
+    color: #10b981;
     text-transform: uppercase;
     letter-spacing: 2px;
     margin-bottom: 0.6rem;
 }
 .section-title {
-    font-size: 2rem;
+    font-size: 2.2rem;
     font-weight: 700;
     color: #f1f5f9;
     margin-bottom: 0.5rem;
 }
 .section-desc {
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: #64748b;
-    max-width: 500px;
+    max-width: 550px;
     margin: 0 auto;
 }
 
@@ -154,13 +158,14 @@ header {visibility: hidden;}
     display: flex;
     align-items: stretch;
     gap: 0;
-    margin: 0 auto 3rem;
+    margin: 0 auto 3.5rem;
     position: relative;
     justify-content: center;
 }
 .pipeline-step {
-    background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.015));
-    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 16px;
     padding: 1.6rem 1.2rem;
     text-align: center;
@@ -171,8 +176,8 @@ header {visibility: hidden;}
 }
 .pipeline-step:hover {
     transform: translateY(-3px);
-    border-color: rgba(34, 197, 94, 0.3);
-    box-shadow: 0 12px 30px rgba(34, 197, 94, 0.08);
+    border-color: rgba(16, 185, 129, 0.3);
+    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.08);
 }
 .pipeline-num {
     display: inline-flex;
@@ -181,7 +186,7 @@ header {visibility: hidden;}
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #22c55e, #10b981);
+    background: linear-gradient(135deg, #10b981, #059669);
     color: #fff;
     font-size: 0.8rem;
     font-weight: 700;
@@ -201,7 +206,7 @@ header {visibility: hidden;}
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #22c55e;
+    color: #10b981;
     font-size: 1.5rem;
     padding: 0 0.4rem;
     opacity: 0.5;
@@ -215,26 +220,27 @@ header {visibility: hidden;}
     margin: 0 auto 3rem;
 }
 .crop-card {
-    background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
-    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 16px;
     padding: 2rem 1.5rem;
     text-align: center;
     transition: all 0.3s ease;
 }
 .crop-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
 }
-.crop-card:nth-child(1):hover { border-color: rgba(234, 179, 8, 0.4); }
-.crop-card:nth-child(2):hover { border-color: rgba(239, 68, 68, 0.4); }
-.crop-card:nth-child(3):hover { border-color: rgba(249, 115, 22, 0.4); }
+.crop-card:nth-child(1):hover { border-color: rgba(245, 158, 11, 0.35); }
+.crop-card:nth-child(2):hover { border-color: rgba(239, 68, 68, 0.35); }
+.crop-card:nth-child(3):hover { border-color: rgba(16, 185, 129, 0.35); }
+
 .crop-icon {
     font-size: 3rem;
     margin-bottom: 1rem;
 }
 .crop-name {
-    font-size: 1.25rem;
+    font-size: 1.3rem;
     font-weight: 700;
     color: #f1f5f9;
     margin-bottom: 0.4rem;
@@ -250,11 +256,11 @@ header {visibility: hidden;}
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
-    margin: 0 auto 3rem;
+    margin: 0 auto 3.5rem;
 }
 .tech-item {
-    background: linear-gradient(145deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
-    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255, 255, 255, 0.015);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 12px;
     padding: 1.2rem 1rem;
     text-align: center;
@@ -279,18 +285,18 @@ header {visibility: hidden;}
 .custom-footer {
     text-align: center;
     padding: 2rem 0;
-    border-top: 1px solid rgba(255,255,255,0.06);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
     margin-top: 2rem;
 }
 .footer-text {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     color: #475569;
     font-weight: 500;
 }
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
-    .hero-title { font-size: 2rem; }
+    .hero-title { font-size: 2.2rem; }
     .metric-grid { grid-template-columns: repeat(2, 1fr); }
     .pipeline-container { flex-direction: column; align-items: center; }
     .pipeline-arrow { transform: rotate(90deg); }
