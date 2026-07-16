@@ -10,3 +10,4 @@ matplotlib
 seaborn
 pandas
 tensorflow==2.19.0
+gdown
