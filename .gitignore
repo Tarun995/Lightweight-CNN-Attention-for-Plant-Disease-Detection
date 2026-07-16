@@ -148,7 +148,5 @@ cython_debug/
 .DS_Store
 Thumbs.db
 
-# Large Model Weights (exceeding GitHub limit of 100MB)
-models/disease/*.keras
-models/yolo/*.pt
-models/u2net/*.pth
+# u2net exceeds GitHub's 100MB limit — fetched at runtime instead
+models/u2net/u2net.pth
