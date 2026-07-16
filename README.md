@@ -2,6 +2,9 @@
 
 > *An empirical ablation study on model design choices for efficient, deployable crop disease classifiers — trained on a 4GB consumer GPU, ready for edge inference.*
 
+**🌐 Live Demo:** [lightweight-cnn-attention-for-plant-disease-detection-d3r7x7b2.streamlit.app](https://lightweight-cnn-attention-for-plant-disease-detection-d3r7x7b2.streamlit.app/)
+> Hosted on Streamlit Community Cloud's free tier — first load may take 20–30s to spin up, and inference can feel a bit slow on CPU. Please be patient with it!
+
 ---
 
 ## What This Study Found
@@ -118,6 +121,8 @@ Both datasets split 70% train / 15% validation / 15% test.
 ---
 
 ## Streamlit Application
+
+**🌐 Try it live:** [lightweight-cnn-attention-for-plant-disease-detection-d3r7x7b2.streamlit.app](https://lightweight-cnn-attention-for-plant-disease-detection-d3r7x7b2.streamlit.app/)
 
 A full interactive interface is included for exploring results, uploading leaf images through the pipeline, and visualizing Grad-CAM outputs.
 
@@ -243,5 +248,3 @@ Open [http://localhost:8501](http://localhost:8501)
 - **Edge deployment is viable.** Sub-60ms inference on a 4GB GPU means this pipeline runs on hardware accessible to agricultural AI applications.
 
 ---
-
-
