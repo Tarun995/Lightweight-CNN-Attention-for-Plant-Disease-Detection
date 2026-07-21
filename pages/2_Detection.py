@@ -344,20 +344,21 @@ def show_disease_guidance(crop, label):
     pest = PESTICIDE_LINKS.get(crop, "#")
 
     if info is None or label == "Healthy":
-        st.markdown(f"""
-        <div style="background:rgba(16,185,129,0.05);border:1px solid rgba(16,185,129,0.14);
-                    border-radius:14px;padding:1.8rem;text-align:center;margin-top:0.5rem;">
-            <div style="font-size:2rem;margin-bottom:0.6rem;">🌱</div>
-            <h3 style="color:#34d399;margin:0 0 0.5rem;font-weight:700;font-size:1.2rem;">Plant is Healthy</h3>
-            <p style="color:#64748b;margin:0 0 1.4rem;font-size:0.9rem;line-height:1.6;">
-                No signs of active infection detected. Maintain current watering, nutrient, and spacing routines.
-            </p>
-            <a href="{fert}" target="_blank" style="background:#10b981;color:#fff;text-decoration:none;
-               padding:0.65rem 1.4rem;border-radius:8px;font-weight:700;font-size:0.85rem;display:inline-block;">
-                🌾 Browse Crop Nutrient Products
-            </a>
-        </div>
-        """, unsafe_allow_html=True)
+        healthy_html = (
+            '<div style="background:rgba(16,185,129,0.05);border:1px solid rgba(16,185,129,0.14);'
+            'border-radius:14px;padding:1.8rem;text-align:center;margin-top:0.5rem;">'
+            '<div style="font-size:2rem;margin-bottom:0.6rem;">🌱</div>'
+            '<h3 style="color:#34d399;margin:0 0 0.5rem;font-weight:700;font-size:1.2rem;">Plant is Healthy</h3>'
+            '<p style="color:#64748b;margin:0 0 1.4rem;font-size:0.9rem;line-height:1.6;">'
+            'No signs of active infection detected. Maintain current watering, nutrient, and spacing routines.'
+            '</p>'
+            f'<a href="{fert}" target="_blank" style="background:#10b981;color:#fff;text-decoration:none;'
+            'padding:0.65rem 1.4rem;border-radius:8px;font-weight:700;font-size:0.85rem;display:inline-block;">'
+            '🌾 Browse Crop Nutrient Products'
+            '</a>'
+            '</div>'
+        )
+        st.markdown(healthy_html, unsafe_allow_html=True)
         return
 
     immediate_items = "".join([
@@ -376,29 +377,32 @@ def show_disease_guidance(crop, label):
     col_a, col_b = st.columns(2, gap="medium")
 
     with col_a:
-        st.markdown(f"""
-        <div class="treatment-box treatment-action">
-            <div class="treatment-section-label" style="color:#fbbf24;">⚡ Immediate Actions</div>
-            {immediate_items}
-        </div>
-        """, unsafe_allow_html=True)
+        action_html = (
+            '<div class="treatment-box treatment-action">'
+            '<div class="treatment-section-label" style="color:#fbbf24;">⚡ Immediate Actions</div>'
+            f'{immediate_items}'
+            '</div>'
+        )
+        st.markdown(action_html, unsafe_allow_html=True)
 
     with col_b:
-        st.markdown(f"""
-        <div class="treatment-box treatment-context">
-            <div class="treatment-section-label" style="color:#f87171;">🦠 Pathogen & Cause</div>
-            {causes_items}
-            <div class="treatment-section-label" style="color:#818cf8;margin-top:1.2rem;">🛡️ Long-term Prevention</div>
-            {further_items}
-        </div>
-        """, unsafe_allow_html=True)
+        context_html = (
+            '<div class="treatment-box treatment-context">'
+            '<div class="treatment-section-label" style="color:#f87171;">🦠 Pathogen & Cause</div>'
+            f'{causes_items}'
+            '<div class="treatment-section-label" style="color:#818cf8;margin-top:1.2rem;">🛡️ Long-term Prevention</div>'
+            f'{further_items}'
+            '</div>'
+        )
+        st.markdown(context_html, unsafe_allow_html=True)
 
-    st.markdown(f"""
-    <div class="cta-row">
-        <a href="{fert}" target="_blank" class="cta-btn cta-green">🛒 Shop Fertilizers</a>
-        <a href="{pest}" target="_blank" class="cta-btn cta-red">🧪 Shop Fungicides</a>
-    </div>
-    """, unsafe_allow_html=True)
+    cta_html = (
+        '<div class="cta-row">'
+        f'<a href="{fert}" target="_blank" class="cta-btn cta-green">🛒 Shop Fertilizers</a>'
+        f'<a href="{pest}" target="_blank" class="cta-btn cta-red">🧪 Shop Fungicides</a>'
+        '</div>'
+    )
+    st.markdown(cta_html, unsafe_allow_html=True)
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -487,16 +491,25 @@ if uploaded_file is None:
     ]
     for col, (icon, name, badge_cls, sci, desc, experimental) in zip([c1, c2, c3], crop_cards):
         with col:
-            exp_badge = '<div class="crop-badge-experimental">Experimental</div>' if experimental else ""
-            st.markdown(f"""
-            <div class="crop-card">
-                {exp_badge}
-                <div style="font-size:3rem;margin-bottom:0.8rem;">{icon}</div>
-                <span class="crop-badge {badge_cls}">{name}</span>
-                <div style="font-size:0.75rem;color:#475569;font-style:italic;margin:0.3rem 0 0.8rem;">{sci}</div>
-                <div style="font-size:0.88rem;color:#64748b;line-height:1.55;">{desc}</div>
-            </div>
-            """, unsafe_allow_html=True)
+            # NOTE: built as a single continuous string (no embedded blank lines).
+            # A multi-line f-string here would leave a blank line whenever
+            # exp_badge_html is "", and Markdown treats "blank line + indented
+            # text" as the start of a code block — which silently breaks HTML
+            # rendering for every non-experimental card.
+            exp_badge_html = (
+                '<div class="crop-badge-experimental">Experimental</div>'
+                if experimental else ""
+            )
+            card_html = (
+                '<div class="crop-card">'
+                f'{exp_badge_html}'
+                f'<div style="font-size:3rem;margin-bottom:0.8rem;">{icon}</div>'
+                f'<span class="crop-badge {badge_cls}">{name}</span>'
+                f'<div style="font-size:0.75rem;color:#475569;font-style:italic;margin:0.3rem 0 0.8rem;">{sci}</div>'
+                f'<div style="font-size:0.88rem;color:#64748b;line-height:1.55;">{desc}</div>'
+                '</div>'
+            )
+            st.markdown(card_html, unsafe_allow_html=True)
 
 else:
     # ── Load models ──────────────────────────────────────────────────────────
