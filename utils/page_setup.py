@@ -8,10 +8,9 @@ import streamlit as st
 _SIDEBAR_CSS = """
 <style>
 /* ════════════════════════════════════════════════
-   SIDEBAR  — premium dark glass panel
+   SIDEBAR  — minimal dark glass panel
 ════════════════════════════════════════════════ */
 
-/* Sidebar shell */
 [data-testid="stSidebar"] {
     background: linear-gradient(180deg, #0b1623 0%, #080d16 60%, #050810 100%) !important;
     border-right: 1px solid rgba(255,255,255,0.05) !important;
@@ -22,13 +21,11 @@ _SIDEBAR_CSS = """
     padding-top: 1rem;
 }
 
-/* ── Nav container ── */
 [data-testid="stSidebarNav"] {
     padding: 0.5rem 0.8rem 1.2rem !important;
     background: transparent !important;
 }
 
-/* ── Individual nav links ── */
 [data-testid="stSidebarNavLink"] {
     border-radius: 10px !important;
     padding: 0.62rem 1rem !important;
@@ -46,7 +43,6 @@ _SIDEBAR_CSS = """
     border-color: rgba(16,185,129,0.14) !important;
 }
 
-/* Active / selected page link */
 [data-testid="stSidebarNavLink"][aria-selected="true"] {
     background: rgba(16,185,129,0.11) !important;
     color: #34d399 !important;
@@ -54,7 +50,6 @@ _SIDEBAR_CSS = """
     border: 1px solid rgba(16,185,129,0.22) !important;
 }
 
-/* Icon next to link text */
 [data-testid="stSidebarNavLink"] img,
 [data-testid="stSidebarNavLink"] svg {
     opacity: 0.55;
@@ -64,7 +59,6 @@ _SIDEBAR_CSS = """
     opacity: 1;
 }
 
-/* ── Collapse toggle button ── */
 [data-testid="stSidebarCollapsedControl"],
 [data-testid="collapsedControl"] {
     background: rgba(255,255,255,0.04) !important;
@@ -73,12 +67,10 @@ _SIDEBAR_CSS = """
     color: #94a3b8 !important;
 }
 
-/* ── Sidebar inner content area ── */
 [data-testid="stSidebar"] [data-testid="stVerticalBlock"] {
     gap: 0 !important;
 }
 
-/* ── Scrollbar in sidebar ── */
 [data-testid="stSidebar"]::-webkit-scrollbar { width: 4px; }
 [data-testid="stSidebar"]::-webkit-scrollbar-track { background: transparent; }
 [data-testid="stSidebar"]::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 4px; }
@@ -88,25 +80,24 @@ _SIDEBAR_CSS = """
 
 def inject_sidebar():
     """
-    Inject global sidebar CSS and render the branded sidebar header + footer.
+    Inject global sidebar CSS and render a minimal branding header.
     Call this once at the top of every page (right after st.set_page_config).
     """
     st.markdown(_SIDEBAR_CSS, unsafe_allow_html=True)
 
-    # ── Branding block in the sidebar (appears below auto-nav) ──
     with st.sidebar:
         st.markdown("""
         <div style="
-            margin: 0.5rem 0 1.2rem;
-            padding: 1.1rem 1.2rem;
+            margin: 0.5rem 0 1rem;
+            padding: 1rem 1.1rem;
             background: rgba(16,185,129,0.06);
             border: 1px solid rgba(16,185,129,0.14);
             border-radius: 14px;
             text-align: center;
         ">
-            <div style="font-size:2rem;margin-bottom:0.35rem;">🌿</div>
+            <div style="font-size:1.7rem;margin-bottom:0.3rem;">🌿</div>
             <div style="
-                font-size:0.95rem;
+                font-size:0.92rem;
                 font-weight:800;
                 background: linear-gradient(135deg,#a7f3d0,#10b981);
                 -webkit-background-clip:text;
@@ -116,59 +107,12 @@ def inject_sidebar():
                 line-height:1.25;
             ">Plant Disease<br>Detection</div>
             <div style="
-                font-size:0.68rem;
+                font-size:0.65rem;
                 color:#334155;
                 font-weight:600;
                 text-transform:uppercase;
                 letter-spacing:1.5px;
-                margin-top:0.4rem;
+                margin-top:0.35rem;
             ">Deep Learning · v1.0</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-        # Pipeline quick-reference
-        st.markdown("""
-        <div style="padding:0 0.4rem;margin-bottom:0.6rem;">
-            <div style="font-size:0.62rem;font-weight:800;text-transform:uppercase;
-                        letter-spacing:1.8px;color:#1e3a5f;margin-bottom:0.7rem;">
-                Pipeline
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-
-        pipeline_steps = [
-            ("🔍", "YOLOv8", "Leaf Detection"),
-            ("✂️", "U²-Net", "Background Removal"),
-            ("🔬", "YOLOv8", "Lesion Isolation"),
-            ("🧠", "CNN+Attn", "Classification"),
-        ]
-        for icon, model, task in pipeline_steps:
-            st.markdown(f"""
-            <div style="
-                display:flex;align-items:center;gap:0.7rem;
-                padding:0.5rem 0.6rem;
-                border-radius:8px;
-                margin-bottom:0.2rem;
-            ">
-                <span style="font-size:1rem;">{icon}</span>
-                <div>
-                    <div style="font-size:0.78rem;font-weight:700;color:#475569;line-height:1.2;">{task}</div>
-                    <div style="font-size:0.65rem;color:#1e3a5f;font-weight:600;">{model}</div>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-
-        # Footer
-        st.markdown("""
-        <div style="
-            margin-top:2rem;
-            padding-top:1rem;
-            border-top:1px solid rgba(255,255,255,0.04);
-            text-align:center;
-        ">
-            <div style="font-size:0.68rem;color:#1e3a5f;font-weight:500;line-height:1.6;">
-                Powered by Deep Learning<br>
-                <span style="color:#10b981;font-weight:700;">97.8% accuracy</span> on potato & corn
-            </div>
         </div>
         """, unsafe_allow_html=True)

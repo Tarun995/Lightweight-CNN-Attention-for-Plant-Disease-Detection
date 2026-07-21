@@ -128,7 +128,7 @@ with col2:
 st.markdown("<div class='custom-content-card'>", unsafe_allow_html=True)
 st.markdown("<h3 style='color: #f1f5f9; font-weight: 700; margin-top:0;'>📊 Performance Gains (Pure CNN vs. CNN + Attention)</h3>", unsafe_allow_html=True)
 
-crop_sel = st.selectbox("Select Crop Model to Compare", ["Potato Model", "Tomato Model", "Corn Model"])
+crop_sel = st.selectbox("Select Crop Model to Compare", ["Potato Model", "Tomato Model"])
 
 # Performance Data
 data_map = {
@@ -141,11 +141,6 @@ data_map = {
         "metrics": ["Accuracy", "Precision", "Recall", "F1-Score"],
         "cnn": [86.0, 84.5, 85.0, 84.7],
         "attention": [78.9, 75.0, 72.0, 73.0]
-    },
-    "Corn Model": {
-        "metrics": ["Accuracy", "Precision", "Recall", "F1-Score"],
-        "cnn": [92.1, 91.8, 92.0, 91.9],
-        "attention": [97.8, 97.5, 97.8, 97.6]
     }
 }
 
@@ -222,12 +217,6 @@ with col_t1:
                 <td style="padding:8px 0; text-align:right; color:#34d399;">2,724</td>
                 <td style="padding:8px 0; text-align:right; color:#34d399;">2,724</td>
             </tr>
-            <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
-                <td style="padding:8px 0; font-weight:600;">Corn</td>
-                <td style="padding:8px 0; text-align:right; color:#34d399;">3,852</td>
-                <td style="padding:8px 0; text-align:right; color:#34d399;">480</td>
-                <td style="padding:8px 0; text-align:right; color:#34d399;">480</td>
-            </tr>
         </table>
     </div>
     """, unsafe_allow_html=True)
@@ -237,21 +226,20 @@ with col_t2:
     fig2, ax2 = plt.subplots(figsize=(7, 4.3))
     fig2.patch.set_facecolor('none')
     ax2.set_facecolor('none')
-    
-    sizes = [2152, 18160, 4812]
-    labels = ['Potato Dataset', 'Tomato Dataset', 'Corn Dataset']
-    colors = ['#f59e0b', '#ef4444', '#10b981']
-    explode = (0, 0.05, 0)  # explode tomato (largest)
-    
-    wedges, texts, autotexts = ax2.pie(sizes, explode=explode, labels=labels, colors=colors,
+
+    sizes = [2152, 18160]
+    labels = ['Potato Dataset', 'Tomato Dataset']
+    colors = ['#f59e0b', '#ef4444']
+
+    wedges, texts, autotexts = ax2.pie(sizes, labels=labels, colors=colors,
                                        autopct='%1.1f%%', shadow=False, startangle=140,
                                        textprops=dict(color='#f1f5f9', fontsize=9))
-    
+
     for autotext in autotexts:
         autotext.set_color('#0f172a')
         autotext.set_weight('bold')
-        
+
     ax2.axis('equal')
     ax2.set_title("Proportion of Images by Crop Class in Global Database", color='#f1f5f9', pad=15, fontweight='bold', fontsize=12)
-    
+
     st.pyplot(fig2)

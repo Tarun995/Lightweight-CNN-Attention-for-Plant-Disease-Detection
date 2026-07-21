@@ -98,10 +98,7 @@ with col2:
     <div class="about-card">
         <h3 style="border-left: 3px solid #ec4899; padding-left: 0.6rem;">🔗 Reference Links</h3>
         <ul style="padding-left:1.2rem; font-size:0.9rem; color:#10b981; list-style-type: square;">
-            <li style="margin-bottom:0.5rem;"><a href="https://github.com" target="_blank" style="color:#10b981; text-decoration:none; font-weight:600;">💻 GitHub Repository</a></li>
-            <li style="margin-bottom:0.5rem;"><a href="https://arxiv.org" target="_blank" style="color:#10b981; text-decoration:none; font-weight:600;">📄 Research Paper (Pre-print)</a></li>
-            <li style="margin-bottom:0.5rem;"><a href="https://pytorch.org" target="_blank" style="color:#10b981; text-decoration:none; font-weight:600;">🔥 PyTorch Backend</a></li>
-            <li style="margin-bottom:0.5rem;"><a href="https://tensorflow.org" target="_blank" style="color:#10b981; text-decoration:none; font-weight:600;">🧠 TensorFlow Core</a></li>
+            <li style="margin-bottom:0.5rem;"><a href="https://github.com/Tarun995/Lightweight-CNN-Attention-for-Plant-Disease-Detection" target="_blank" style="color:#10b981; text-decoration:none; font-weight:600;">💻 GitHub Repository</a></li>
         </ul>
     </div>
     """, unsafe_allow_html=True)

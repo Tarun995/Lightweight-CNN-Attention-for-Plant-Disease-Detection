@@ -20,8 +20,7 @@ A 22-layer CNN trained on 2,152 potato images didn't just underperform. It colla
 Adding squeeze-and-excitation (SE) attention blocks and a targeted augmentation pipeline to the 7-layer potato model pushed accuracy from 96.67% → **97.8% (Macro F1 = 0.96)** — within 7.39M parameters and 53ms inference on a 4GB GPU.
 
 **3. Background removal creates a domain alignment requirement.**
-U²-Net background removal on the tomato dataset produced a model that dropped from 85.99% to 78.9% when tested on raw field images (BR→Orig). The same model, when test images were also preprocessed (BR→BR), recovered robustness — demonstrating that the preprocessing protocol is as important a design decision as the architecture.
-
+U²-Net background removal on the tomato dataset creates a hard domain-alignment requirement: a model trained on background-removed images collapses to 54.72% accuracy when tested on raw field images, but recovers to 78.89% when the deployment pipeline stays consistent (BR train → BR inference).
 ---
 
 ## Ablation Summary
@@ -41,15 +40,15 @@ U²-Net background removal on the tomato dataset produced a model that dropped f
 | Crop | Architecture | Preprocessing | Accuracy | Macro F1 | Parameters | Inference |
 |---|---|---|---|---|---|---|
 | Potato | 7-layer CNN + SE Attention | Heavy augmentation | **97.80%** | **0.96** | 7.39M | 53.3 ms/img |
-| Tomato | 14-layer CNN + SE Attention | U²-Net BR → Orig | **78.90%** | **0.73** | 6.52M | 55.0 ms/img |
+| Tomato | 14-layer CNN + SE Attention | U²-Net BR → BR | **78.89%** | **0.73** | 6.52M | 55.0 ms/img |
 
 ### Domain Alignment Effect (Tomato)
 
 | Training Domain | Inference Domain | Accuracy |
 |---|---|---|
 | Original images | Original images | 85.99% |
-| Background-removed (BR) | Original images | 78.90% ← **domain mismatch** |
-| Background-removed (BR) | Background-removed (BR) | Superior robustness ← **aligned deployment** |
+| Background-removed (BR) | Original images | 54.72% ← **domain mismatch** |
+| Background-removed (BR) | Background-removed (BR) | 78.89% ← **aligned deployment** |
 
 ---
 
@@ -230,7 +229,7 @@ Open [http://localhost:8501](http://localhost:8501)
 │   ├── model_loader.py           ← Cached model loading
 │   ├── pipeline.py               ← Full inference pipeline
 │   └── u2net_bg_removal.py       ← U²-Net preprocessing helper
-├── models/                       ← Weights directory (gitignored)
+├── models/                       ← Weights directory
 ├── results/
 │   ├── confusion_matrices/       ← Per-model validation matrices
 │   ├── evaluation/               ← Classification report CSVs

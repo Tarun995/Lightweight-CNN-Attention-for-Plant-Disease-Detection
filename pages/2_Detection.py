@@ -237,6 +237,7 @@ header { visibility: hidden; }
     text-align: center;
     transition: all 0.25s ease;
     height: 100%;
+    position: relative;
 }
 .crop-card:hover { border-color: rgba(16,185,129,0.25); transform: translateY(-3px); }
 .crop-badge {
@@ -252,6 +253,21 @@ header { visibility: hidden; }
 .b-potato { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.2); color: #f59e0b; }
 .b-tomato { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #ef4444; }
 .b-corn   { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2); color: #10b981; }
+
+.crop-badge-experimental {
+    position: absolute;
+    top: 0.9rem;
+    right: 0.9rem;
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.12);
+    border: 1px solid rgba(251, 191, 36, 0.3);
+    border-radius: 20px;
+    padding: 0.2rem 0.55rem;
+}
 
 /* ── Section divider ── */
 .section-divider {
@@ -286,6 +302,20 @@ header { visibility: hidden; }
     color: #475569;
     margin-bottom: 0.5rem;
     display: block;
+}
+
+/* ── Experimental notice (corn) ── */
+.experimental-note {
+    background: rgba(251,191,36,0.06);
+    border: 1px solid rgba(251,191,36,0.22);
+    border-radius: 10px;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.8rem;
+    color: #fbbf24;
+    margin-top: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -384,6 +414,13 @@ with cfg_col:
             options=["potato", "tomato", "corn"],
             format_func=lambda x: x.capitalize()
         )
+        if crop == "corn":
+            st.markdown("""
+            <div class="experimental-note">
+                ⚠️ <span>Corn detection is <b>experimental</b> — the model runs live, but hasn't
+                been formally benchmarked yet. Treat predictions as indicative, not verified.</span>
+            </div>
+            """, unsafe_allow_html=True)
         st.divider()
         default_bg = (crop != "corn")
         bg_remove = st.checkbox(
@@ -442,16 +479,18 @@ if uploaded_file is None:
     c1, c2, c3 = st.columns(3, gap="medium")
     crop_cards = [
         ("🥔", "Potato", "b-potato", "Solanum tuberosum",
-         "3 disease classes: Early Blight, Late Blight, and Healthy specimens."),
+         "3 disease classes: Early Blight, Late Blight, and Healthy specimens.", False),
         ("🍅", "Tomato", "b-tomato", "Solanum lycopersicum",
-         "10 classes covering bacterial spots, viruses, molds, mites, and blights."),
+         "10 classes covering bacterial spots, viruses, molds, mites, and blights.", False),
         ("🌽", "Corn", "b-corn", "Zea mays",
-         "4 classes: Gray Leaf Spot, Common Rust, Northern Blight, Healthy."),
+         "4 classes: Gray Leaf Spot, Common Rust, Northern Blight, Healthy.", True),
     ]
-    for col, (icon, name, badge_cls, sci, desc) in zip([c1, c2, c3], crop_cards):
+    for col, (icon, name, badge_cls, sci, desc, experimental) in zip([c1, c2, c3], crop_cards):
         with col:
+            exp_badge = '<div class="crop-badge-experimental">Experimental</div>' if experimental else ""
             st.markdown(f"""
             <div class="crop-card">
+                {exp_badge}
                 <div style="font-size:3rem;margin-bottom:0.8rem;">{icon}</div>
                 <span class="crop-badge {badge_cls}">{name}</span>
                 <div style="font-size:0.75rem;color:#475569;font-style:italic;margin:0.3rem 0 0.8rem;">{sci}</div>
@@ -530,6 +569,14 @@ else:
                 <div class="banner-conf" style="color:#fca5a5;">
                     Diagnostic Confidence: <b>{confidence_score:.1f}%</b>
                 </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        if crop == "corn":
+            st.markdown("""
+            <div class="experimental-note" style="margin-top:-1.2rem;margin-bottom:1.8rem;">
+                ⚠️ <span>This result is from an <b>experimental, unbenchmarked</b> corn model —
+                treat it as a preview, not a verified diagnosis.</span>
             </div>
             """, unsafe_allow_html=True)
 

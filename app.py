@@ -226,6 +226,7 @@ header {visibility: hidden;}
     padding: 2rem 1.5rem;
     text-align: center;
     transition: all 0.3s ease;
+    position: relative;
 }
 .crop-card:hover {
     transform: translateY(-5px);
@@ -249,6 +250,20 @@ header {visibility: hidden;}
     font-size: 0.85rem;
     color: #64748b;
     font-weight: 500;
+}
+.crop-badge-experimental {
+    position: absolute;
+    top: 0.9rem;
+    right: 0.9rem;
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.12);
+    border: 1px solid rgba(251, 191, 36, 0.3);
+    border-radius: 20px;
+    padding: 0.25rem 0.65rem;
 }
 
 /* ── Tech Stack Section ── */
@@ -325,7 +340,7 @@ st.markdown("""
     <div class="metric-card">
         <div class="metric-icon">🎯</div>
         <div class="metric-value">97.8%</div>
-        <div class="metric-label">Best Accuracy</div>
+        <div class="metric-label">Best Accuracy (Potato)</div>
     </div>
     <div class="metric-card">
         <div class="metric-icon">🌾</div>
@@ -406,6 +421,7 @@ st.markdown("""
         <div class="crop-diseases">Bacterial Spot · Late Blight · Leaf Mold · +7 more</div>
     </div>
     <div class="crop-card">
+        <div class="crop-badge-experimental">Experimental</div>
         <div class="crop-icon">🌽</div>
         <div class="crop-name">Corn</div>
         <div class="crop-diseases">Gray Leaf Spot · Common Rust · Blight · Healthy</div>
